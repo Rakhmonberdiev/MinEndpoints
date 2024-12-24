@@ -1,4 +1,6 @@
-﻿using MinEndpoints.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using MinEndpoints.Abstractions;
+using MinEndpoints.Data;
 
 
 namespace MinEndpoints.Endpoints
@@ -7,7 +9,14 @@ namespace MinEndpoints.Endpoints
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapGet("get",()=>"Hello world");
+            app.MapGet("get", async (IAppDbContext db, CancellationToken cancellationToken) =>
+            {
+                var users = await db.Users.ToListAsync(cancellationToken);
+
+                if(users != null) return Results.Ok(users);
+
+                return Results.NotFound();
+            });
         }
     }
 }
