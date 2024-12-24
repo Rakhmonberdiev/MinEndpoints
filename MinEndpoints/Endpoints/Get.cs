@@ -5,7 +5,7 @@ using MinEndpoints.Data;
 
 namespace MinEndpoints.Endpoints
 {
-    public class Get : IEndpoint
+    public sealed class Get : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
@@ -13,7 +13,7 @@ namespace MinEndpoints.Endpoints
             {
                 var users = await db.Users.ToListAsync(cancellationToken);
 
-                if(users != null) return Results.Ok(users);
+                if (users != null) return Results.Ok(users);
 
                 return Results.NotFound();
             });
